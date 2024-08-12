@@ -1,0 +1,45 @@
+[package]
+name = "is31fl3743b-driver"
+version = "0.1.0"
+authors = ["Kurtis Dinelle <t-kudinelle@microsoft.com>"]
+repository = "https://github.com/pop-project/is31fl3743b"
+license = "MIT"
+description = "Platform-agnostic Rust driver for the IS31F13743B LED matrix controller."
+readme = "README.md"
+keywords = ["LED", "matrix", "spi", "driver", "embedded-hal-driver"]
+categories = ["embedded", "hardware-support", "no-std"]
+homepage = "https://github.com/pop-project/is31fl3743b"
+documentation = "https://docs.rs/is31fl3743b-driver"
+include = [
+    "/**/*.rs",
+    "/Cargo.toml",
+    "/README.md",
+    "/LICENSE",
+]
+edition = "2021"
+
+[dependencies]
+bilge = "0.2.0"
+embedded-hal = "1.0.0"
+embedded-hal-async = "1.0.0"
+maybe-async = "0.2.10"
+
+[dev-dependencies]
+embedded-hal-mock = { version = "0.11.1", features = ["embedded-hal-async"] }
+tokio = { version = "1.39.2", features = ["rt", "macros"] }
+
+[features]
+preserve_registers = []
+is_blocking = ["maybe-async/is_sync"]
+default = []
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "deny"
+
+[lints.clippy]
+correctness = "forbid"
+suspicious = "forbid"
+perf = "forbid"
+style = "forbid"
+pedantic = "deny"

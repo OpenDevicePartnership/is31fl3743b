@@ -1,7 +1,7 @@
 # IS31F13743B
 
 A `#[no_std]` platform-agnostic driver for the
-[IS31F13743B](https://lumissil.com/assets/pdf/core/IS31FL3746B_DS.pdf)
+[IS31F13743B](https://lumissil.com/assets/pdf/core/IS31FL3743B_DS.pdf)
 LED matrix controller using the [embedded-hal](https://docs.rs/embedded-hal) traits.
 
 ## Usage

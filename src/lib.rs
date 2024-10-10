@@ -12,6 +12,8 @@
 #![doc = include_str!("../README.md")]
 #![cfg_attr(not(test), no_std)]
 
+use core::ops::{Deref, DerefMut, Index, IndexMut};
+
 #[cfg(feature = "is_blocking")]
 use embedded_hal::{
     delay::DelayNs,
@@ -22,8 +24,6 @@ use embedded_hal_async::{
     delay::DelayNs,
     spi::{Operation, SpiDevice},
 };
-
-use core::ops::{Deref, DerefMut, Index, IndexMut};
 
 mod registers;
 pub use registers::*;
@@ -414,8 +414,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     ) -> Result<(), SPI::Error> {
         let addr_offset = led_reg_offset(swx, csy);
         let raw = raw_from_percent(brightness_percentage);
-        self.write_with_addr_offset(Register::Pwm, addr_offset, raw)
-            .await
+        self.write_with_addr_offset(Register::Pwm, addr_offset, raw).await
     }
 
     /// Sets the peak current of an LED specified by given `SWx` and `CSy` coordinates
@@ -426,16 +425,10 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn set_led_peak_current(
-        &mut self,
-        swx: SWx,
-        csy: CSy,
-        scale_percentage: u8,
-    ) -> Result<(), SPI::Error> {
+    pub async fn set_led_peak_current(&mut self, swx: SWx, csy: CSy, scale_percentage: u8) -> Result<(), SPI::Error> {
         let addr_offset = led_reg_offset(swx, csy);
         let raw = raw_from_percent(scale_percentage);
-        self.write_with_addr_offset(Register::Scaling, addr_offset, raw)
-            .await
+        self.write_with_addr_offset(Register::Scaling, addr_offset, raw).await
     }
 
     /// Power on the device.
@@ -444,8 +437,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     ///
     /// `SPI::Error` when SPI transaction fails
     pub async fn enable(&mut self) -> Result<(), SPI::Error> {
-        self.set_configuration_reg(self.cached_reg.config.with_ssd(true))
-            .await
+        self.set_configuration_reg(self.cached_reg.config.with_ssd(true)).await
     }
 
     /// Power off the device.
@@ -454,8 +446,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     ///
     /// `SPI::Error` when SPI transaction fails
     pub async fn disable(&mut self) -> Result<(), SPI::Error> {
-        self.set_configuration_reg(self.cached_reg.config.with_ssd(false))
-            .await
+        self.set_configuration_reg(self.cached_reg.config.with_ssd(false)).await
     }
 
     /// Enables switch columns from SW1 up to the column specified.
@@ -467,10 +458,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn switch_column_enable_upto(
-        &mut self,
-        switch_column: SwxSetting,
-    ) -> Result<(), SPI::Error> {
+    pub async fn switch_column_enable_upto(&mut self, switch_column: SwxSetting) -> Result<(), SPI::Error> {
         self.set_configuration_reg(self.cached_reg.config.with_sws(switch_column))
             .await
     }
@@ -548,10 +536,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn detect_shorts(
-        &mut self,
-        delay: impl DelayNs,
-    ) -> Result<OpenShortTestResult, SPI::Error> {
+    pub async fn detect_shorts(&mut self, delay: impl DelayNs) -> Result<OpenShortTestResult, SPI::Error> {
         self.open_short_test(Open::EnableShort, delay).await
     }
 
@@ -566,10 +551,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn detect_opens(
-        &mut self,
-        delay: impl DelayNs,
-    ) -> Result<OpenShortTestResult, SPI::Error> {
+    pub async fn detect_opens(&mut self, delay: impl DelayNs) -> Result<OpenShortTestResult, SPI::Error> {
         self.open_short_test(Open::EnableOpen, delay).await
     }
 
@@ -618,10 +600,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn set_spread_spectrum_cycle_time(
-        &mut self,
-        clt: CycleTime,
-    ) -> Result<(), SPI::Error> {
+    pub async fn set_spread_spectrum_cycle_time(&mut self, clt: CycleTime) -> Result<(), SPI::Error> {
         self.set_spread_spectrum_reg(self.cached_reg.spread_spectrum.with_clt(clt))
             .await
     }
@@ -697,14 +676,12 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
         }
 
         // Set PWM and Scaling registers to max value
-        self.write_multiple(Register::Pwm, &[0xFF; NUM_LED_REG])
-            .await?;
+        self.write_multiple(Register::Pwm, &[0xFF; NUM_LED_REG]).await?;
         #[cfg(feature = "preserve_registers")]
         {
             self.cached_reg.pwm = LedRegList([0xFF; NUM_LED_REG]);
         }
-        self.write_multiple(Register::Scaling, &[0xFF; NUM_LED_REG])
-            .await?;
+        self.write_multiple(Register::Scaling, &[0xFF; NUM_LED_REG]).await?;
         #[cfg(feature = "preserve_registers")]
         {
             self.cached_reg.scaling = LedRegList([0xFF; NUM_LED_REG]);
@@ -734,12 +711,10 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
         // Restore previous PWM and Scaling register values
         #[cfg(feature = "preserve_registers")]
         {
-            self.write_multiple(Register::Pwm, tmp_pwm.inner_ref())
-                .await?;
+            self.write_multiple(Register::Pwm, tmp_pwm.inner_ref()).await?;
             self.cached_reg.pwm = tmp_pwm;
 
-            self.write_multiple(Register::Scaling, tmp_scaling.inner_ref())
-                .await?;
+            self.write_multiple(Register::Scaling, tmp_scaling.inner_ref()).await?;
             self.cached_reg.scaling = tmp_scaling;
         }
 
@@ -759,8 +734,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
         debug_assert!((LED_REG_MIN..=LED_REG_MAX).contains(&n));
 
         let offset = n - LED_REG_MIN;
-        self.write_with_addr_offset(Register::Pwm, offset, value)
-            .await?;
+        self.write_with_addr_offset(Register::Pwm, offset, value).await?;
         #[cfg(feature = "preserve_registers")]
         {
             self.cached_reg.pwm[offset as usize] = value;
@@ -777,8 +751,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
         debug_assert!((LED_REG_MIN..=LED_REG_MAX).contains(&n));
 
         let offset = n - LED_REG_MIN;
-        self.write_with_addr_offset(Register::Scaling, offset, value)
-            .await?;
+        self.write_with_addr_offset(Register::Scaling, offset, value).await?;
         #[cfg(feature = "preserve_registers")]
         {
             self.cached_reg.scaling[offset as usize] = value;
@@ -802,12 +775,8 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn set_global_current_control_reg(
-        &mut self,
-        value: GlobalCurrentControl,
-    ) -> Result<(), SPI::Error> {
-        self.write(Register::GlobalCurrentControl, value.into())
-            .await?;
+    pub async fn set_global_current_control_reg(&mut self, value: GlobalCurrentControl) -> Result<(), SPI::Error> {
+        self.write(Register::GlobalCurrentControl, value.into()).await?;
         self.cached_reg.gcc = value;
         Ok(())
     }
@@ -817,12 +786,8 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn set_pdr_pur_resistor_reg(
-        &mut self,
-        value: PullDownUpResistorSelection,
-    ) -> Result<(), SPI::Error> {
-        self.write(Register::PullDownUpResistorSelection, value.into())
-            .await?;
+    pub async fn set_pdr_pur_resistor_reg(&mut self, value: PullDownUpResistorSelection) -> Result<(), SPI::Error> {
+        self.write(Register::PullDownUpResistorSelection, value.into()).await?;
         self.cached_reg.res_phase = value;
         Ok(())
     }
@@ -832,12 +797,8 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn set_temperature_status_reg(
-        &mut self,
-        value: TemperatureStatus,
-    ) -> Result<(), SPI::Error> {
-        self.write(Register::TemperatureStatus, value.into())
-            .await?;
+    pub async fn set_temperature_status_reg(&mut self, value: TemperatureStatus) -> Result<(), SPI::Error> {
+        self.write(Register::TemperatureStatus, value.into()).await?;
         self.cached_reg.temperature = value;
         Ok(())
     }
@@ -847,10 +808,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// # Errors
     ///
     /// `SPI::Error` when SPI transaction fails
-    pub async fn set_spread_spectrum_reg(
-        &mut self,
-        value: SpreadSpectrum,
-    ) -> Result<(), SPI::Error> {
+    pub async fn set_spread_spectrum_reg(&mut self, value: SpreadSpectrum) -> Result<(), SPI::Error> {
         self.write(Register::SpreadSpectrum, value.into()).await?;
         self.cached_reg.spread_spectrum = value;
         Ok(())
@@ -863,8 +821,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     /// `SPI::Error` when SPI transaction fails
     pub async fn open_reg(&mut self, n: u8) -> Result<u8, SPI::Error> {
         debug_assert!((OPEN_REG_MIN..=OPEN_REG_MAX).contains(&n));
-        self.read_with_addr_offset(Register::Open, n - OPEN_REG_MIN)
-            .await
+        self.read_with_addr_offset(Register::Open, n - OPEN_REG_MIN).await
     }
 
     /// Gets the cached Nth (where 0x01 <= N <= 0xC6) PWM register.
@@ -907,9 +864,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     }
 
     async fn read_with_addr_offset(&mut self, reg: Register, offset: u8) -> Result<u8, SPI::Error> {
-        let data = self
-            .read_multiple_with_addr_offset::<1>(reg, offset)
-            .await?;
+        let data = self.read_multiple_with_addr_offset::<1>(reg, offset).await?;
         Ok(data[0])
     }
 
@@ -954,19 +909,12 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
         self.write_with_addr_offset(reg, 0, value).await
     }
 
-    async fn write_with_addr_offset(
-        &mut self,
-        reg: Register,
-        offset: u8,
-        value: u8,
-    ) -> Result<(), SPI::Error> {
+    async fn write_with_addr_offset(&mut self, reg: Register, offset: u8, value: u8) -> Result<(), SPI::Error> {
         let cmd_byte: u8 = Command::default()
             .with_rw(CommandType::Write)
             .with_page(reg.page())
             .into();
-        self.spi
-            .write(&[cmd_byte, u8::from(reg) + offset, value])
-            .await
+        self.spi.write(&[cmd_byte, u8::from(reg) + offset, value]).await
     }
 
     async fn write_multiple(&mut self, reg: Register, data: &[u8]) -> Result<(), SPI::Error> {
@@ -978,9 +926,7 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
 
         let cmd_write_op = Operation::Write(&cmd_write_buf);
         let data_write_op = Operation::Write(data);
-        self.spi
-            .transaction(&mut [cmd_write_op, data_write_op])
-            .await
+        self.spi.transaction(&mut [cmd_write_op, data_write_op]).await
     }
 }
 
@@ -990,10 +936,7 @@ mod tests {
 
     use super::*;
 
-    #[maybe_async::test(
-        feature = "is_blocking",
-        async(not(feature = "is_blocking"), tokio::test)
-    )]
+    #[maybe_async::test(feature = "is_blocking", async(not(feature = "is_blocking"), tokio::test))]
     async fn write_configuration_register() {
         let expectations = vec![
             // Initial reset
@@ -1019,10 +962,7 @@ mod tests {
         mock.done();
     }
 
-    #[maybe_async::test(
-        feature = "is_blocking",
-        async(not(feature = "is_blocking"), tokio::test)
-    )]
+    #[maybe_async::test(feature = "is_blocking", async(not(feature = "is_blocking"), tokio::test))]
     async fn new_with_sync() {
         let expectations1 = vec![
             // Initial reset

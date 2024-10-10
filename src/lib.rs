@@ -40,6 +40,7 @@ const LED_REG_MAX: u8 = 0xC6;
 const NUM_LED_REG: usize = ((LED_REG_MAX - LED_REG_MIN) + 1) as usize;
 
 /// Switch column.
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum SWx {
     /// Switch column 1
     SW1,
@@ -105,6 +106,7 @@ impl TryFrom<u8> for SWx {
 }
 
 /// Current sink row.
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum CSy {
     /// Current sink row 1
     CS1,

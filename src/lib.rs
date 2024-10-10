@@ -714,8 +714,8 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
         self.set_global_current_control_reg(GlobalCurrentControl::from(0x0F))
             .await?;
 
-        // Clear pur/pdr register before starting test
-        self.set_pdr_pur_resistor_reg(PullDownUpResistorSelection::default())
+        // Clear pur/pdr register before starting test, as recommended by datasheet when GCC is 0x0F
+        self.set_pdr_pur_resistor_reg(PullDownUpResistorSelection::from(0b0000_0000))
             .await?;
 
         // Begin test by setting the OSDE field to the appropriate test type (Open or Short)

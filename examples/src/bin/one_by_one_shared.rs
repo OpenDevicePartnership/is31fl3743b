@@ -97,7 +97,7 @@ async fn main(_spawner: Spawner) {
                     let _ = driver[device].set_led_peak_current(j, i, 80).await;
                     let _ = driver[device].set_led_brightness(j, i, 80).await;
                 }
-                Timer::after(Duration::from_micros(1)).await;
+                Timer::after(Duration::from_millis(10)).await;
             }
         }
 
@@ -107,7 +107,7 @@ async fn main(_spawner: Spawner) {
                 for device in 0..2 {
                     let _ = driver[device].set_led_brightness(j, i, 0).await;
                 }
-                Timer::after(Duration::from_micros(1)).await;
+                Timer::after(Duration::from_millis(10)).await;
             }
         }
     }

@@ -49,6 +49,8 @@ driver[1].set_global_current(90).await?;
 driver[1].set_led_peak_current(SWx::SW2, CSy::CS10, 50).await?;
 driver[1].set_led_brightness(SWx::SW2, CSy::CS10, 50).await?;
 ```
+## Examples
+See the `examples/` directory for examples using this driver with the popular async library **[Embassy](https://embassy.dev/)** and an **[STM32F411CE](https://www.st.com/en/microcontrollers-microprocessors/stm32f411ce.html)** microcontroller.
 
 ## Features
 

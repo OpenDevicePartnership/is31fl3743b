@@ -77,21 +77,12 @@ async fn main(_spawner: Spawner) {
     // Driver is fully set up, we can now start turning on LEDs!
     // Create a white breathing effect
     loop {
-        for brightness in 3..80 {
+        for brightness in (3..80).chain((3..80).rev()) {
             for i in ROWS.into_iter() {
                 for j in COLS.into_iter() {
                     // Set scaling register to max current
                     let _ = driver.set_led_peak_current(j, i, 100).await;
                     // Set PWM brightness register
-                    let _ = driver.set_led_brightness(j, i, brightness).await;
-                    Timer::after(Duration::from_micros(1)).await;
-                }
-            }
-        }
-
-        for brightness in (3..80).rev() {
-            for i in ROWS.into_iter() {
-                for j in COLS.into_iter() {
                     let _ = driver.set_led_brightness(j, i, brightness).await;
                     Timer::after(Duration::from_micros(1)).await;
                 }

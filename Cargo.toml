@@ -2,13 +2,13 @@
 name = "is31fl3743b-driver"
 version = "0.1.0"
 authors = ["Kurtis Dinelle <t-kudinelle@microsoft.com>"]
-repository = "https://github.com/pop-project/is31fl3743b"
+repository = "https://github.com/OpenDevicePartnership/is31fl3743b"
 license = "MIT"
 description = "Platform-agnostic Rust driver for the IS31F13743B LED matrix controller."
 readme = "README.md"
 keywords = ["LED", "matrix", "spi", "driver", "embedded-hal-driver"]
 categories = ["embedded", "hardware-support", "no-std"]
-homepage = "https://github.com/pop-project/is31fl3743b"
+homepage = "https://github.com/OpenDevicePartnership/is31fl3743b"
 documentation = "https://docs.rs/is31fl3743b-driver"
 include = [
     "/**/*.rs",

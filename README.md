@@ -1,4 +1,4 @@
-# IS31F13743B
+# Lumissil IS31F13743B
 
 A `#[no_std]` platform-agnostic driver for the
 [IS31F13743B](https://lumissil.com/assets/pdf/core/IS31FL3743B_DS.pdf)

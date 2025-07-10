@@ -1,4 +1,4 @@
-//! This is a platform-agnostic Rust driver for the Lumissil IS31FL3743B LED 
+//! This is a platform-agnostic Rust driver for the Lumissil IS31FL3743B LED
 //! Matrix Driver based on the [`embedded-hal`] traits.
 //!
 //! [`embedded-hal`]: https://docs.rs/embedded-hal

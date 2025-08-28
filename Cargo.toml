@@ -1,6 +1,6 @@
 [package]
 name = "is31fl3743b-driver"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Kurtis Dinelle <kurtisdinelle@gmail.com>"]
 repository = "https://github.com/OpenDevicePartnership/is31fl3743b"
 license = "MIT"

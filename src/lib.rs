@@ -414,9 +414,26 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
         csy: CSy,
         brightness_percentage: u8,
     ) -> Result<(), SPI::Error> {
-        let addr_offset = led_reg_offset(swx, csy);
         let raw = raw_from_percent(brightness_percentage);
-        self.write_with_addr_offset(Register::Pwm, addr_offset, raw).await
+        self.set_led_brightness_bulk(swx, csy, &[raw]).await
+    }
+
+    /// Sets the brightness of several LEDs starting at the given `SWx` and `CSy` coordinates.
+    ///
+    /// Brightness must be passed as a raw value from 0 to 255, rather than as a percentage.
+    ///
+    /// # Errors
+    ///
+    /// `SPI::Error` when SPI transaction fails.
+    pub async fn set_led_brightness_bulk(
+        &mut self,
+        start_swx: SWx,
+        start_csy: CSy,
+        raw_brightness_values: &[u8],
+    ) -> Result<(), SPI::Error> {
+        let addr_offset = led_reg_offset(start_swx, start_csy);
+        self.write_multiple_with_addr_offset(Register::Pwm, addr_offset, raw_brightness_values)
+            .await
     }
 
     /// Sets the peak current of an LED specified by given `SWx` and `CSy` coordinates
@@ -428,9 +445,26 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     ///
     /// `SPI::Error` when SPI transaction fails
     pub async fn set_led_peak_current(&mut self, swx: SWx, csy: CSy, scale_percentage: u8) -> Result<(), SPI::Error> {
-        let addr_offset = led_reg_offset(swx, csy);
         let raw = raw_from_percent(scale_percentage);
-        self.write_with_addr_offset(Register::Scaling, addr_offset, raw).await
+        self.set_led_peak_current_bulk(swx, csy, &[raw]).await
+    }
+
+    /// Sets the peak current of several LEDs starting at the given `SWx` and `CSy` coordinates.
+    ///
+    /// Scale value must be passed as a raw value from 0 to 255, rather than as a percentage.
+    ///
+    /// # Errors
+    ///
+    /// `SPI::Error` when SPI transaction fails
+    pub async fn set_led_peak_current_bulk(
+        &mut self,
+        start_swx: SWx,
+        start_csy: CSy,
+        raw_scale_values: &[u8],
+    ) -> Result<(), SPI::Error> {
+        let addr_offset = led_reg_offset(start_swx, start_csy);
+        self.write_multiple_with_addr_offset(Register::Scaling, addr_offset, raw_scale_values)
+            .await
     }
 
     /// Power on the device.
@@ -920,11 +954,20 @@ impl<SPI: SpiDevice> Is31fl3743bDevice<SPI> {
     }
 
     async fn write_multiple(&mut self, reg: Register, data: &[u8]) -> Result<(), SPI::Error> {
+        self.write_multiple_with_addr_offset(reg, 0, data).await
+    }
+
+    async fn write_multiple_with_addr_offset(
+        &mut self,
+        reg: Register,
+        offset: u8,
+        data: &[u8],
+    ) -> Result<(), SPI::Error> {
         let cmd_byte: u8 = Command::default()
             .with_rw(CommandType::Write)
             .with_page(reg.page())
             .into();
-        let cmd_write_buf = [cmd_byte, reg.into()];
+        let cmd_write_buf = [cmd_byte, u8::from(reg) + offset];
 
         let cmd_write_op = Operation::Write(&cmd_write_buf);
         let data_write_op = Operation::Write(data);

@@ -6,44 +6,10 @@ use embassy_executor::Spawner;
 use embassy_stm32::gpio::{Level, Output, Speed};
 use embassy_stm32::spi::{BitOrder, Config, Spi, MODE_0};
 use embassy_stm32::time::Hertz;
-use embassy_time::{Delay, Duration, Timer};
+use embassy_time::{Delay, Timer};
 use embedded_hal_bus::spi::ExclusiveDevice;
 use is31fl3743b_driver::{CSy, Is31fl3743b, SWx};
 use {defmt_rtt as _, panic_probe as _};
-
-const COLS: [SWx; 11] = [
-    SWx::SW1,
-    SWx::SW2,
-    SWx::SW3,
-    SWx::SW4,
-    SWx::SW5,
-    SWx::SW6,
-    SWx::SW7,
-    SWx::SW8,
-    SWx::SW9,
-    SWx::SW10,
-    SWx::SW11,
-];
-const ROWS: [CSy; 18] = [
-    CSy::CS1,
-    CSy::CS2,
-    CSy::CS3,
-    CSy::CS4,
-    CSy::CS5,
-    CSy::CS6,
-    CSy::CS7,
-    CSy::CS8,
-    CSy::CS9,
-    CSy::CS10,
-    CSy::CS11,
-    CSy::CS12,
-    CSy::CS13,
-    CSy::CS14,
-    CSy::CS15,
-    CSy::CS16,
-    CSy::CS17,
-    CSy::CS18,
-];
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
@@ -74,19 +40,16 @@ async fn main(_spawner: Spawner) {
     // Set global current, check method documentation for more info
     let _ = driver.set_global_current(90).await;
 
+    let mut buf = [100_u8; 11 * 18];
+    let _ = driver.set_led_peak_current_bulk(SWx::SW1, CSy::CS1, &buf).await;
+
     // Driver is fully set up, we can now start turning on LEDs!
     // Create a white breathing effect
     loop {
-        for brightness in (3..80).chain((3..80).rev()) {
-            for i in ROWS.into_iter() {
-                for j in COLS.into_iter() {
-                    // Set scaling register to max current
-                    let _ = driver.set_led_peak_current(j, i, 100).await;
-                    // Set PWM brightness register
-                    let _ = driver.set_led_brightness(j, i, brightness).await;
-                    Timer::after(Duration::from_micros(1)).await;
-                }
-            }
+        for brightness in (0..=255_u8).chain((0..=255).rev()) {
+            buf.fill(brightness);
+            let _ = driver.set_led_brightness_bulk(SWx::SW1, CSy::CS1, &buf).await;
+            Timer::after_micros(1).await;
         }
     }
 }

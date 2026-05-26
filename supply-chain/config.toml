@@ -18,8 +18,3 @@ url = "https://raw.githubusercontent.com/mozilla/supply-chain/main/audits.toml"
 
 [policy.is31fl3743b-driver]
 audit-as-crates-io = false
-
-[[exemptions.windows-sys]]
-version = "0.59.0"
-criteria = "safe-to-run"
-notes = "Dev-only dep (mio). 287k lines auto-generated Windows API FFI bindings by Microsoft (kennykerr). All import sources trust publisher. Full audit infeasible."

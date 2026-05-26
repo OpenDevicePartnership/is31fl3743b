@@ -294,3 +294,9 @@ who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
 delta = "1.0.18 -> 1.0.24"
 notes = "Delta: Unicode 16.0->17.0 table update. Pure data. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.windows-sys]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+version = "0.59.0"
+notes = "Auto-generated Windows API FFI. No unsafe blocks, no build script. Microsoft (kennykerr). Assisted-by: copilot-cli:claude-opus-4.6"

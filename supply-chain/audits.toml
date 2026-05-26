@@ -1,6 +1,30 @@
 
 # cargo-vet audits file
 
+[[audits.arbitrary-int]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+version = "1.3.0"
+notes = "Full: no_std arbitrary-width integers. Unsafe limited to new_unchecked. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.bilge]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+version = "0.2.0"
+notes = "Full: no_std bitfield. Unsafe for transmutation, sound. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.bilge-impl]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+version = "0.2.0"
+notes = "Full: proc-macro for bilge. Generated unsafe is bounded and sound. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.cfg-if]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "1.0.3 -> 1.0.1"
+notes = "Downgrade: reverts macro changes. No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
 [[audits.cfg-if]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
@@ -60,6 +84,24 @@ who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-run"
 version = "0.12.1"
 notes = "Full: no_std time lib. deny(unsafe_code). No build script. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.io-uring]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "0.7.10 -> 0.7.9"
+notes = "Downgrade: removes Pipe opcode and features. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.libc]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "0.2.176 -> 0.2.174"
+notes = "Downgrade: reverts FFI additions. Pure bindings. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.memchr]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "2.7.4 -> 2.7.5"
+notes = "Delta: doc typo fixes, removed compiler_builtins. Assisted-by: copilot-cli:claude-opus-4.6"
 
 [[audits.num]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
@@ -133,6 +175,12 @@ criteria = "safe-to-deploy"
 delta = "1.0.94 -> 1.0.95"
 notes = "Delta: SourceFile removed. No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
 
+[[audits.rustc-demangle]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "0.1.24 -> 0.1.25"
+notes = "Delta: version bump, removed compiler_builtins. No code changes. Assisted-by: copilot-cli:claude-opus-4.6"
+
 [[audits.syn]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
@@ -186,6 +234,12 @@ who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
 delta = "2.0.110 -> 2.0.117"
 notes = "Delta: no_std migration, receiver parsing fix. No new unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.tokio]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "1.45.0 -> 1.46.1"
+notes = "Delta: timer refactor, biased mode, SpawnLocation. Unsafe improvements. Assisted-by: copilot-cli:claude-opus-4.6"
 
 [[audits.tokio]]
 who = "Jerry Xie <jerryxie@microsoft.com>"

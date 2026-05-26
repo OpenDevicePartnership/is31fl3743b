@@ -7,11 +7,29 @@ criteria = "safe-to-deploy"
 delta = "1.0.3 -> 1.0.4"
 notes = "Delta: macro refactor to tt-munching. No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
 
+[[audits.cfg-if]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+delta = "1.0.3 -> 1.0.4"
+notes = "Delta: macro refactor to tt-munching. No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
 [[audits.embedded-hal-mock]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-run"
 delta = "0.8.0 -> 0.11.1"
 notes = "Delta: adds embedded-hal 1.x support. No unsafe, test mock library. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.embedded-hal-mock]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "0.8.0 -> 0.11.1"
+notes = "Delta: adds embedded-hal 1.x support. No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.embedded-time]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+version = "0.12.1"
+notes = "Full: no_std time lib. deny(unsafe_code). Assisted-by: copilot-cli:claude-opus-4.6"
 
 [[audits.embedded-time]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
@@ -29,6 +47,12 @@ notes = "Full: no_std time lib. deny(unsafe_code). No build script. Assisted-by:
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-run"
 delta = "0.4.0 -> 0.3.1"
+notes = "Downgrade: version-only dep bumps. no_std meta-crate. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.num]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "0.4.0 -> 0.3.1"
 notes = "Downgrade: version-only dep bumps. no_std meta-crate. No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
 
 [[audits.num-complex]]
@@ -37,17 +61,41 @@ criteria = "safe-to-run"
 delta = "0.4.2 -> 0.3.1"
 notes = "Downgrade: removes ComplexFloat, bytemuck. Feature subset. Assisted-by: copilot-cli:claude-opus-4.6"
 
+[[audits.num-complex]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "0.4.2 -> 0.3.1"
+notes = "Downgrade: removes ComplexFloat. Feature subset. Assisted-by: copilot-cli:claude-opus-4.6"
+
 [[audits.num-rational]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-run"
 delta = "0.4.1 -> 0.3.2"
 notes = "Downgrade: removes Default impl, ldexp. Pure math. Assisted-by: copilot-cli:claude-opus-4.6"
 
+[[audits.num-rational]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "0.4.1 -> 0.3.2"
+notes = "Downgrade: removes Default impl. Pure math. Assisted-by: copilot-cli:claude-opus-4.6"
+
 [[audits.proc-macro2]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
 delta = "1.0.94 -> 1.0.95"
 notes = "Delta: SourceFile removed, replaced by Span::file(). No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.proc-macro2]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+delta = "1.0.94 -> 1.0.95"
+notes = "Delta: SourceFile removed. No unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.syn]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+delta = "2.0.109 -> 2.0.99"
+notes = "Downgrade delta: parser logic adjustments. No new unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
 
 [[audits.syn]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
@@ -64,6 +112,18 @@ notes = "Downgrade delta: const trait bound parsing changes. No new unsafe. Assi
 [[audits.syn]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
+delta = "2.0.109 -> 2.0.104"
+notes = "Downgrade delta: const trait bound parsing changes. No new unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.syn]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+delta = "2.0.110 -> 2.0.117"
+notes = "Delta: no_std migration, receiver parsing fix. No new unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.syn]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
 delta = "2.0.110 -> 2.0.117"
 notes = "Delta: no_std migration, receiver parsing fix. No new unsafe. Assisted-by: copilot-cli:claude-opus-4.6"
 
@@ -76,11 +136,29 @@ notes = "Delta: io-uring read, eager driver handoff. All unsafe sound. Assisted-
 [[audits.tokio]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-run"
+delta = "1.51.1 -> 1.52.1"
+notes = "Delta: io-uring read, eager driver handoff. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.tokio]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
 delta = "1.51.1 -> 1.52.3"
 notes = "Delta: io-uring read, eager driver handoff, trace_with API. All unsafe sound. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.tokio]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-run"
+delta = "1.51.1 -> 1.52.3"
+notes = "Delta: io-uring read, eager driver handoff, trace_with API. Assisted-by: copilot-cli:claude-opus-4.6"
 
 [[audits.unicode-ident]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
 delta = "1.0.18 -> 1.0.24"
 notes = "Delta: Unicode 16.0->17.0 table update. No unsafe, pure data. Assisted-by: copilot-cli:claude-opus-4.6"
+
+[[audits.unicode-ident]]
+who = "Jerry Xie <jerryxie@microsoft.com>"
+criteria = "safe-to-deploy"
+delta = "1.0.18 -> 1.0.24"
+notes = "Delta: Unicode 16.0->17.0 table update. Pure data. Assisted-by: copilot-cli:claude-opus-4.6"

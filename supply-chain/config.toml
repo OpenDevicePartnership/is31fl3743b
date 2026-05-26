@@ -18,6 +18,3 @@ url = "https://raw.githubusercontent.com/mozilla/supply-chain/main/audits.toml"
 
 [policy.is31fl3743b-driver]
 audit-as-crates-io = false
-
-[policy.is31fl3743b-driver-examples]
-audit-as-crates-io = false

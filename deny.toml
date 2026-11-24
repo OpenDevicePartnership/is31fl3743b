@@ -92,7 +92,6 @@ ignore = [
 allow = [
     "MIT",
     "Apache-2.0",
-    "Unicode-DFS-2016",
 
     # unicode-ident 1.0.14 switched from Unicode-DFS-2016 to Unicode-3.0 license.
     "Unicode-3.0",

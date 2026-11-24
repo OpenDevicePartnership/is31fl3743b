@@ -27,7 +27,7 @@ maybe-async = "0.2.10"
 
 [dev-dependencies]
 embedded-hal-mock = { version = "0.11.1", features = ["embedded-hal-async"] }
-tokio = { version = "1.39.2", features = ["rt", "macros"] }
+tokio = { version = "1.54", features = ["rt", "macros"] }
 
 [features]
 preserve_registers = []

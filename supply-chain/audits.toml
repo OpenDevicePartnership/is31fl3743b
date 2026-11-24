@@ -277,6 +277,11 @@ criteria = "safe-to-run"
 delta = "1.51.1 -> 1.52.3"
 notes = "Delta: io-uring read, eager driver handoff, trace_with API. Assisted-by: copilot-cli:claude-opus-4.6"
 
+[[audits.tokio]]
+who = "Felipe Balbi <felipe.balbi@microsoft.com>"
+criteria = "safe-to-run"
+delta = "1.53.1 -> 1.54.1"
+
 [[audits.unicode-ident]]
 who = "Jerry Xie <jerryxie@microsoft.com>"
 criteria = "safe-to-deploy"
